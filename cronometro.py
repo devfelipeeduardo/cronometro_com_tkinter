@@ -1,4 +1,5 @@
 from tkinter import *
+from time import sleep
 
 #CORES
 cor1 = "#0a0a0a"  # black
@@ -23,17 +24,19 @@ global tempo
 global rodar
 global contador
 global limitador
+global rodando
 
 tempo = '00:00:00'
 rodar = False
 contador = -5
 limitador = 59
+rodando = False
 
 def iniciar():
 
     global tempo
     global contador
-    global limitador    
+    global limitador
 
     if rodar == True:
         
@@ -45,12 +48,10 @@ def iniciar():
 
         #Rodando o cronômetro
         else:
+
             label_tempo['font'] = ('Times 50 bold')           
-
             temporaria = tempo
-
             hora, minuto, segundo = map(int, temporaria.split(':'))
-
             segundo = contador
 
             if (segundo >= limitador):
@@ -66,29 +67,49 @@ def iniciar():
             label_tempo['text'] = temporaria
             tempo = temporaria
 
+        
         label_tempo.after(1000, iniciar)
         contador += 1
 
+#DESABILITA E HABILITA INICIAR
+def habilitar_iniciar():
+    botao_iniciar.config(state=NORMAL)
+    sleep(1)
+def desabilitar_iniciar():
+    botao_iniciar.config(state=DISABLED)
+
+#DESABILITA E HABILITA PAUSAR
+def habilitar_pausar():
+    botao_pausar.config(state=NORMAL)
+    sleep(1)
+def desabilitar_pausar():
+    botao_pausar.config(state=DISABLED)
 
 
 def alterar_estado_iniciar():
     global rodar
+    desabilitar_iniciar()
+    habilitar_pausar()
     rodar = True
     iniciar()
+
 
 def pausar():
     global rodar
     rodar = False
+    habilitar_iniciar()
+    desabilitar_pausar()
 
 def reiniciar():
     global contador
     global tempo
     contador = -5 
-
     tempo = '00:00:00'
-
     label_tempo['text'] = tempo
     label_tempo['font'] = ('Times 50 bold') 
+    desabilitar_pausar()
+    sleep(1)
+    habilitar_iniciar()
 
 #CRONÔMETRO E TEMPO
 
